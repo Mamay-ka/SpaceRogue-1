@@ -62,7 +62,7 @@ namespace Gameplay.GameEvent
                 var direction = _playerView.transform.position - position;
                 var controller = _factory.CreateComet(position, direction);
                 AddController(controller);
-                AddGameEventObjectToUIController(controller.View.gameObject, true);
+                AddGameEventObjectToUIController(controller.View.gameObject);
                 _cometControllers.Add(controller);
             }
 

@@ -9,25 +9,23 @@ namespace Gameplay.Input
         
         private SubscribedProperty<float> _verticalAxisInput;
 
+        private SubscribedProperty<float> _horizontalAxisInput;//!!!!
+
         private SubscribedProperty<bool> _primaryFireInput;
         private SubscribedProperty<bool> _changeWeaponInput;
-        private SubscribedProperty<bool> _nextLevelInput;
-        private SubscribedProperty<bool> _mapInput;
         
         public virtual void Init(
             SubscribedProperty<Vector3> mousePositionInput,
             SubscribedProperty<float> verticalMove,
+            SubscribedProperty<float> horizontalMove,//!!!
             SubscribedProperty<bool> primaryFireInput,
-            SubscribedProperty<bool> changeWeaponInput,
-            SubscribedProperty<bool> nextLevelInput,
-            SubscribedProperty<bool> mapInput)
+            SubscribedProperty<bool> changeWeaponInput)
         {
             _mousePositionInput = mousePositionInput;
             _verticalAxisInput = verticalMove;
+            _horizontalAxisInput = horizontalMove;//!!!!
             _primaryFireInput = primaryFireInput;
             _changeWeaponInput = changeWeaponInput;
-            _nextLevelInput = nextLevelInput;
-            _mapInput = mapInput;
         }
 
         protected virtual void OnMousePositionInput(Vector3 value)
@@ -36,16 +34,13 @@ namespace Gameplay.Input
         protected virtual void OnVerticalInput(float value) 
             => _verticalAxisInput.Value = value;
 
+        protected virtual void OnHorizontalInput(float value)//!!!!
+            => _horizontalAxisInput.Value = value;
+
         protected virtual void OnPrimaryFireInput(bool value)
             => _primaryFireInput.Value = value;
         
         protected virtual void OnChangeWeaponInput(bool value)
             => _changeWeaponInput.Value = value;
-
-        protected virtual void OnNextLevelInput(bool value)
-            => _nextLevelInput.Value = value;
-        
-        protected virtual void OnMapInput(bool value)
-            => _mapInput.Value = value;
     }
 }

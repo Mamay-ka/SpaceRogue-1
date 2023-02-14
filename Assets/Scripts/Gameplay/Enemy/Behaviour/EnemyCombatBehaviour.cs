@@ -7,27 +7,31 @@ using Utilities.Unity;
 
 namespace Gameplay.Enemy.Behaviour
 {
-    public class EnemyCombatBehaviour : EnemyBehaviour
+    public sealed class EnemyCombatBehaviour : EnemyBehaviour
     {
         private readonly EnemyInputController _inputController;
         private readonly FrontalTurretController _frontalTurret;
         private readonly float _firingAngle;
+        private EnemyState _lastEnemyState;
 
         private Vector3 _targetDirection;
         private Vector3 _currentDirection;
-        
-        
-        protected float _distance;
-        protected bool _inZone = true;
+        private float _distance;
+        private bool _inZone;
 
         public EnemyCombatBehaviour(
-            SubscribedProperty<EnemyState> enemyState, EnemyView view, PlayerController playerController,
-            EnemyInputController inputController, FrontalTurretController frontalTurret, EnemyBehaviourConfig config) 
-            : base(enemyState, view, playerController, config)
+            SubscribedProperty<EnemyState> enemyState, 
+            EnemyView view,
+            PlayerController playerController,
+            EnemyInputController inputController,
+            FrontalTurretController frontalTurret,
+            EnemyBehaviourConfig config,
+            EnemyState lastEnemyState) : base(enemyState, view, playerController, config)
         {
             _inputController = inputController;
             _frontalTurret = frontalTurret;
             _firingAngle = config.FiringAngle;
+            _lastEnemyState = lastEnemyState;
         }
 
         protected override void OnUpdate()
@@ -40,6 +44,15 @@ namespace Gameplay.Enemy.Behaviour
 
         protected override void DetectPlayer()
         {
+            if (_distance > Config.PlayerDetectionRadius)
+            {
+                _inZone = false;
+                ExitCombat();
+            }
+            else
+            {
+                _inZone = true;
+            }
         }
 
         private void GetDirectionsAndDistance()
@@ -102,6 +115,11 @@ namespace Gameplay.Enemy.Behaviour
             {
                 _inputController.TurnRight();
             }
+        }
+
+        private void ExitCombat()
+        {
+            ChangeState(_lastEnemyState);
         }
     }
 }

@@ -41,6 +41,7 @@ namespace Gameplay.Player.Movement
             }
         }
 
+       
         public void Turn(bool turningLeft)
         {
             bool isContinuingTurn = CurrentTurnRate < 0 == turningLeft;

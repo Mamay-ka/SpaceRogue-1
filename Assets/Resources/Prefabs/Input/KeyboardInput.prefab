@@ -44,5 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eec30e1f1b241d49deb27c89c357e8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalAxisInputMultiplier: 0.1
   verticalAxisInputMultiplier: 0.1
+  horizontalAxisInputMultiplier: 0.1

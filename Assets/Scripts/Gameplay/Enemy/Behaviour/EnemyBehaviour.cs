@@ -1,7 +1,6 @@
 using System;
 using Gameplay.Player;
 using Utilities.Reactive.SubscriptionProperty;
-
 namespace Gameplay.Enemy.Behaviour
 {
     public abstract class EnemyBehaviour : IDisposable
@@ -23,7 +22,6 @@ namespace Gameplay.Enemy.Behaviour
             _isDisposed = true;
             OnDispose();
             _playerController.PlayerDestroyed -= OnPlayerDestroyed;
-            _playerController.OnControllerDispose -= OnPlayerDestroyed;
             EntryPoint.UnsubscribeFromUpdate(DetectPlayer);
             EntryPoint.UnsubscribeFromUpdate(OnUpdate);
         }
@@ -34,7 +32,6 @@ namespace Gameplay.Enemy.Behaviour
             View = view;
             _playerController = playerController;
             _playerController.PlayerDestroyed += OnPlayerDestroyed;
-            _playerController.OnControllerDispose += OnPlayerDestroyed;
             PlayerView = _playerController.View;
             Config = config;
             EntryPoint.SubscribeToUpdate(DetectPlayer);
@@ -65,7 +62,7 @@ namespace Gameplay.Enemy.Behaviour
         {
             EntryPoint.UnsubscribeFromUpdate(DetectPlayer);
             
-            if(_enemyState.Value == EnemyState.InCombat || _enemyState.Value == EnemyState.InCombatWithRetreat)
+            if(_enemyState.Value == EnemyState.InCombat)
             {
                 ChangeState(EnemyState.PassiveRoaming);
             }

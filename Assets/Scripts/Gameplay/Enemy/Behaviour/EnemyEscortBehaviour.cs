@@ -103,7 +103,7 @@ namespace Gameplay.Enemy.Behaviour
 
         private void EnterCombat()
         {
-            ChangeState(EnemyState.InCombatWithRetreat);
+            ChangeState(EnemyState.InCombat);
         }
     }
 }

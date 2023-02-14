@@ -1,6 +1,7 @@
 using Abstracts;
 using Gameplay.Health;
 using Gameplay.Input;
+using Gameplay.Mechanics.Timer;
 using Gameplay.Movement;
 using Gameplay.Player.FrontalGuns;
 using Gameplay.Player.Inventory;
@@ -30,69 +31,37 @@ namespace Gameplay.Player
 
         private readonly SubscribedProperty<Vector3> _mousePositionInput = new();
         private readonly SubscribedProperty<float> _verticalInput = new();
+        private readonly SubscribedProperty<float> _horizontalInput = new();//!!!!!
         private readonly SubscribedProperty<bool> _primaryFireInput = new();
         private readonly SubscribedProperty<bool> _changeWeaponInput = new ();
 
-        private readonly HealthController _healthController;
+        
+        
+       
+        private const byte MaxCountOfPlayerSpawnTries = 10;
+        private const float PlayerSpawnClearanceRadius = 40.0f;
 
         public event Action PlayerDestroyed = () => { };
-        public event Action OnControllerDispose = () => { };
-        public SubscribedProperty<bool> NextLevelInput = new ();
-        public SubscribedProperty<bool> MapInput = new ();
 
-        public PlayerController(Vector3 playerPosition, HealthInfo healthInfo, ShieldInfo shieldInfo)
+        public PlayerController(Vector3 playerPosition)
         {
             _config = ResourceLoader.LoadObject<PlayerConfig>(_configPath);
             _view = LoadView<PlayerView>(_viewPath, playerPosition);
-
-            var inputController = new InputController(_mousePositionInput, _verticalInput, _primaryFireInput, 
-                _changeWeaponInput, NextLevelInput, MapInput);
+                                                                                               //!!!!!
+            var inputController = new InputController(_mousePositionInput, _verticalInput, _horizontalInput, _primaryFireInput, _changeWeaponInput);
             AddController(inputController);
 
             var inventoryController = AddInventoryController(_config.Inventory);
             var movementController = AddMovementController(_config.Movement, _view);
+           
             var frontalGunsController = AddFrontalGunsController(inventoryController.Turrets, _view);
-            _healthController = AddHealthController(healthInfo, shieldInfo);
+            var healthController = AddHealthController(_config.HealthConfig, _config.ShieldConfig);
             AddCrosshair();
         }
 
-        public void DestroyPlayer()
+        private HealthController AddHealthController(HealthConfig healthConfig, ShieldConfig shieldConfig)
         {
-            _healthController.DestroyUnit();
-        }
-
-        public float GetCurrentHealth()
-        {
-            if(_healthController is not null)
-            {
-                return _healthController.GetCurrentHealth();
-            }
-            return 0;
-        }
-
-        public float GetCurrentShield()
-        {
-            if (_healthController is not null)
-            {
-                return _healthController.GetCurrentShield();
-            }
-            return 0;
-        }
-
-        public void OnPlayerDestroyed()
-        {
-            PlayerDestroyed.Invoke();
-        }
-
-        public void ControllerDispose()
-        {
-            OnControllerDispose.Invoke();
-            Dispose();
-        }
-
-        private HealthController AddHealthController(HealthInfo healthInfo, ShieldInfo shieldInfo)
-        {
-            var healthController = new HealthController(healthInfo, shieldInfo, GameUIController.PlayerStatusBarView, _view);
+            var healthController = new HealthController(healthConfig, shieldConfig, GameUIController.PlayerStatusBarView, _view);
             healthController.SubscribeToOnDestroy(Dispose);
             healthController.SubscribeToOnDestroy(OnPlayerDestroyed);
             AddController(healthController);
@@ -107,8 +76,8 @@ namespace Gameplay.Player
         }
 
         private PlayerMovementController AddMovementController(MovementConfig movementConfig, PlayerView view)
-        {
-            var movementController = new PlayerMovementController(_mousePositionInput, _verticalInput, movementConfig, view);
+        {                                                                                                   //!!!!
+            var movementController = new PlayerMovementController(_mousePositionInput, _verticalInput, _horizontalInput, movementConfig, view);
             AddController(movementController);
             return movementController;
         }
@@ -126,12 +95,16 @@ namespace Gameplay.Player
             var viewTransform = _view.transform;
             var crosshair = UnityEngine.Object.Instantiate(
                 crosshairView,
-                viewTransform.position + _view.transform.TransformDirection(Vector3.up * (viewTransform.localScale.y + 15f)),
+                viewTransform.position + _view.transform.TransformDirection(Vector3.up * (viewTransform.localScale.y + 20f)),
                 viewTransform.rotation
             );
             crosshair.transform.parent = _view.transform;
             AddGameObject(crosshair);
         }
 
+        public void OnPlayerDestroyed()
+        {
+            PlayerDestroyed();
+        }
     }
 }

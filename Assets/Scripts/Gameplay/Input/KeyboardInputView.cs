@@ -5,12 +5,13 @@ namespace Gameplay.Input
     public sealed class KeyboardInputView : BaseInputView
     {
         [SerializeField] private float verticalAxisInputMultiplier;
+        [SerializeField] private float horizontalAxisInputMultiplier;//!!!
 
         private const string Vertical = "Vertical";
         private const KeyCode PrimaryFire = KeyCode.Mouse0;
         private const KeyCode ChangeWeapon = KeyCode.Q;
-        private const KeyCode NextLevel = KeyCode.Return;
-        private const KeyCode Map = KeyCode.Tab;
+
+        private const string Horizontal = "Horizontal";//!!!
 
         private void Start()
         {
@@ -18,8 +19,8 @@ namespace Gameplay.Input
             EntryPoint.SubscribeToUpdate(CheckFiringInput);
             EntryPoint.SubscribeToUpdate(CheckMousePositionInput);
             EntryPoint.SubscribeToUpdate(CheckChangeWeaponInput);
-            EntryPoint.SubscribeToUpdate(CheckNextLevelInput);
-            EntryPoint.SubscribeToUpdate(CheckMapInput);
+
+            EntryPoint.SubscribeToUpdate(CheckHorizontalInput);//!!!!
         }
 
         private void OnDestroy()
@@ -28,8 +29,8 @@ namespace Gameplay.Input
             EntryPoint.UnsubscribeFromUpdate(CheckFiringInput);
             EntryPoint.UnsubscribeFromUpdate(CheckMousePositionInput);
             EntryPoint.UnsubscribeFromUpdate(CheckChangeWeaponInput);
-            EntryPoint.UnsubscribeFromUpdate(CheckNextLevelInput);
-            EntryPoint.UnsubscribeFromUpdate(CheckMapInput);
+
+            EntryPoint.UnsubscribeFromUpdate(CheckHorizontalInput);//!!!!!
         }
 
         private void CheckVerticalInput()
@@ -37,6 +38,14 @@ namespace Gameplay.Input
             float verticalOffset = UnityEngine.Input.GetAxis(Vertical);
             float inputValue = CalculateInputValue(verticalOffset, verticalAxisInputMultiplier);
             OnVerticalInput(inputValue);
+        }
+
+        private void CheckHorizontalInput()//!!!!!!!!
+        {
+            float horizontalOffset = UnityEngine.Input.GetAxis(Horizontal);
+            float inputValue = CalculateInputValue(horizontalOffset, horizontalAxisInputMultiplier);
+            OnHorizontalInput(inputValue);
+           
         }
 
         private void CheckFiringInput()
@@ -55,18 +64,6 @@ namespace Gameplay.Input
         {
             bool value = UnityEngine.Input.GetKeyDown(ChangeWeapon);
             OnChangeWeaponInput(value);
-        }
-
-        private void CheckNextLevelInput()
-        {
-            bool value = UnityEngine.Input.GetKeyDown(NextLevel);
-            OnNextLevelInput(value);
-        }
-        
-        private void CheckMapInput()
-        {
-            bool value = UnityEngine.Input.GetKey(Map);
-            OnMapInput(value);
         }
 
         private static float CalculateInputValue(float axisOffset, float inputMultiplier)

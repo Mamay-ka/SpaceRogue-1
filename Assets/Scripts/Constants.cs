@@ -6,9 +6,6 @@ public static class Constants
     {
         private static readonly string CONFIGS = nameof(Configs);
 
-        public static readonly string LevelProgressConfig = Path.Combine(CONFIGS, nameof(LevelProgressConfig));
-        public static readonly string MinimapConfig = Path.Combine(CONFIGS, nameof(MinimapConfig));
-
         public record Player
         {
             private static readonly string PLAYER = Path.Combine(CONFIGS, nameof(Player));
@@ -37,7 +34,6 @@ public static class Constants
             private static readonly string BACKGROUND = Path.Combine(CONFIGS, nameof(Background));
 
             public static readonly string BackgroundConfig = Path.Combine(BACKGROUND, nameof(BackgroundConfig));
-            public static readonly string MenuBackgroundConfig = Path.Combine(BACKGROUND, nameof(MenuBackgroundConfig));
         }
         
         public record GameEvent
@@ -80,7 +76,6 @@ public static class Constants
             public static readonly string GunPoint = Path.Combine(STUFF, nameof(GunPoint));
             public static readonly string Crosshair = Path.Combine(STUFF, nameof(Crosshair));
             public static readonly string Background = Path.Combine(STUFF, nameof(Background));
-            public static readonly string MenuBackground = Path.Combine(STUFF, nameof(MenuBackground));
         }
 
         public record Canvas
@@ -94,26 +89,13 @@ public static class Constants
             {
                 private static readonly string GAME = Path.Combine(CANVAS, nameof(Game));
 
-                public static readonly string GameCanvas = Path.Combine(GAME, nameof(GameCanvas));
                 public static readonly string StatusBarCanvas = Path.Combine(GAME, nameof(StatusBarCanvas));
                 public static readonly string SpeedometerCanvas = Path.Combine(GAME, nameof(SpeedometerCanvas));
                 public static readonly string WeaponCanvas = Path.Combine(GAME, nameof(WeaponCanvas));
-                public static readonly string LevelNumberCanvas = Path.Combine(GAME, nameof(LevelNumberCanvas));
-                public static readonly string EnemiesCountCanvas = Path.Combine(GAME, nameof(EnemiesCountCanvas));
                 public static readonly string DestroyPlayerCanvas = Path.Combine(GAME, nameof(DestroyPlayerCanvas));
-                public static readonly string NextLevelCanvas = Path.Combine(GAME, nameof(NextLevelCanvas));
                 public static readonly string EnemyHealthStatusBarCanvas = Path.Combine(GAME, nameof(EnemyHealthStatusBarCanvas));
                 public static readonly string EnemyHealthShieldStatusBarCanvas = Path.Combine(GAME, nameof(EnemyHealthShieldStatusBarCanvas));
                 public static readonly string GameEventIndicatorCanvas = Path.Combine(GAME, nameof(GameEventIndicatorCanvas));
-                public static readonly string MinimapCamera = Path.Combine(GAME, nameof(MinimapCamera));
-                public static readonly string MinimapCanvas = Path.Combine(GAME, nameof(MinimapCanvas));
-            }
-
-            public record Menu
-            {
-                private static readonly string MENU = Path.Combine(CANVAS, nameof(Menu));
-
-                public static readonly string MainMenuCanvas = Path.Combine(MENU, nameof(MainMenuCanvas));
             }
         }
     }

@@ -12,12 +12,8 @@ namespace Gameplay.GameEvent
         private readonly UnityEngine.Camera _camera;
 
         private readonly SubscribedProperty<bool> _isVisible = new();
-        
-        private readonly bool _showUntilItIsVisibleOnce;
-        private bool _isVisibleOnce;
 
-        public GameEventUIController(GameEventIndicatorView indicatorView, Collider2D collider, 
-            Sprite icon, float indicatorDiameter, bool showUntilItIsVisibleOnce = false)
+        public GameEventUIController(GameEventIndicatorView indicatorView, Collider2D collider, Sprite icon, float indicatorDiameter)
         {
             _camera = UnityEngine.Camera.main;
             _indicatorView = indicatorView;
@@ -27,8 +23,6 @@ namespace Gameplay.GameEvent
 
             _indicatorView.Icon.sprite = icon;
             _indicatorView.IndicatorDiameter.sizeDelta = new(0, indicatorDiameter);
-
-            _showUntilItIsVisibleOnce = showUntilItIsVisibleOnce;
 
             _isVisible.Subscribe(ShowIndicator);
             EntryPoint.SubscribeToUpdate(RotateToGameEventObject);
@@ -52,10 +46,6 @@ namespace Gameplay.GameEvent
 
             if (_isVisible.Value)
             {
-                if (_showUntilItIsVisibleOnce)
-                {
-                    _isVisibleOnce = true;
-                }
                 return;
             }
 
@@ -68,18 +58,7 @@ namespace Gameplay.GameEvent
 
         private void ShowIndicator(bool isVisible)
         {
-            var value = default(bool);
-
-            if (_isVisibleOnce)
-            {
-                value = false;
-            }
-            else
-            {
-                value = !isVisible;
-            }
-
-            _indicatorView.gameObject.SetActive(value);
+            _indicatorView.gameObject.SetActive(!isVisible);
         }
     }
 }

@@ -25,6 +25,7 @@ namespace Gameplay.Mechanics.Timer
             EntryPoint.SubscribeToUpdate(Tick);
         }
         
+        
         public void Dispose()
         {
             EntryPoint.UnsubscribeFromUpdate(Tick);
