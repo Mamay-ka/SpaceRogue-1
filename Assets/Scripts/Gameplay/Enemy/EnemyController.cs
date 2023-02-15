@@ -18,6 +18,8 @@ namespace Gameplay.Enemy
 {
     public sealed class EnemyController : BaseController
     {
+        public EnemyView View => _view;
+
         private readonly EnemyView _view;
         private readonly EnemyConfig _config;
         private readonly FrontalTurretController _turret;

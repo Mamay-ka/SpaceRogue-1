@@ -27,4 +27,4 @@ MonoBehaviour:
   <StarCount>k__BackingField: 20
   <AutoRadius>k__BackingField: 0
   <ManualRadius>k__BackingField: 5
-  <ObstacleForce>k__BackingField: 2
+  <ObstacleForce>k__BackingField: 1.25

@@ -17,7 +17,7 @@ MonoBehaviour:
   <CheckRadius>k__BackingField: 40
   <Size>k__BackingField: 4
   <Damage>k__BackingField: 25
-  <LifeTimeInSeconds>k__BackingField: 2
+  <LifeTimeInSeconds>k__BackingField: 10
   <Offset>k__BackingField: 80
   <MinSpeed>k__BackingField: 40
   <MaxSpeed>k__BackingField: 40

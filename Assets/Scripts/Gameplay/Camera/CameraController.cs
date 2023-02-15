@@ -30,6 +30,11 @@ namespace Gameplay.Camera
 
         private void FollowPlayer()
         {
+            if(_playerTransform == null)
+            {
+                return;
+            }
+
             var position = _playerTransform.position;
             _cameraTransform.position = new(position.x, position.y, position.z + CameraZAxisOffset);
         }

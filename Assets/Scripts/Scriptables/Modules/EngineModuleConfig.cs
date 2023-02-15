@@ -22,11 +22,5 @@ namespace Scriptables.Modules
         [SerializeField] public float maximumTurnSpeed = 0.1f;
         [Min(0.1f)]
         [SerializeField] public float turnAccelerationTime = 0.1f;
-
-        [Header("Leap speed")]//!!!!
-        [Min(0.1f)]
-        [SerializeField] public float leapSpeed = 0.1f;
-        [Min(0.1f)]
-        [SerializeField] public float leapTime = 0.1f;
     }
 }

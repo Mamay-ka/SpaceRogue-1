@@ -39,7 +39,7 @@ namespace Gameplay.Space.Generator
         protected readonly int[,] _nebulaMap;
         protected readonly int[,] _spaceObjectsMap;
 
-        private List<Point> _availablePoints;
+        private List<Point> _availablePoints = new();
 
         public SpaceGenerator(SpaceView spaceView,
                               SpaceConfig spaceConfig,

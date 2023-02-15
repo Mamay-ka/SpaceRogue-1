@@ -1,4 +1,5 @@
 using Abstracts;
+using System;
 using Utilities.Reactive.SubscriptionProperty;
 
 namespace Gameplay.Enemy.Movement
@@ -35,14 +36,14 @@ namespace Gameplay.Enemy.Movement
             _verticalInput.Value = 0.0f;
         }
         
-        public void TurnRight()
+        public void TurnRight(float value = 1.0f)
         {
-            _horizontalInput.Value = 1.0f;
+            _horizontalInput.Value = Math.Abs(value);
         }
         
-        public void TurnLeft()
+        public void TurnLeft(float value = 1.0f)
         {
-            _horizontalInput.Value = -1.0f;
+            _horizontalInput.Value = -Math.Abs(value);
         }
         
         public void StopTurning()

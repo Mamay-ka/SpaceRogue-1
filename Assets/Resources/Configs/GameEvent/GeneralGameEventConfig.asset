@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: GeneralGameEventConfig
   m_EditorClassIdentifier: 
   <GameEvents>k__BackingField:
-  - {fileID: 11400000, guid: f12d9eacce6f22743acb0b02d5323641, type: 2}
   - {fileID: 11400000, guid: c318b14d5eb8d684e84c8fa5e434bcd8, type: 2}
   - {fileID: 11400000, guid: 47a2923b9f7fefd48999d71cf86f3e1c, type: 2}
   - {fileID: 11400000, guid: e2c4ba2b71150504c8fea37773a24d75, type: 2}

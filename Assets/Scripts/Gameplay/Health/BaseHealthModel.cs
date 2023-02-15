@@ -19,15 +19,14 @@ namespace Gameplay.Health
 
         protected float RegenAmountPerDeltaTime => HealthRegenAmount * Time.deltaTime;
 
-        internal BaseHealthModel(HealthConfig healthConfig)
+        internal BaseHealthModel(IHealthInfo healthInfo)
         {
-            MaximumHealth = new SubscribedProperty<float>(healthConfig.MaximumHealth);
-            var correctHealth = Mathf.Clamp(healthConfig.StartingHealth, 0f, healthConfig.MaximumHealth);
-            CurrentHealth = new SubscribedProperty<float>(correctHealth);
-            HealthRegenAmount = healthConfig.HealthRegen;
-            DamageImmunityFrameDuration = healthConfig.DamageImmunityFrameDuration;
+            MaximumHealth = new SubscribedProperty<float>(healthInfo.MaximumHealth);
+            CurrentHealth = new SubscribedProperty<float>(healthInfo.StartingHealth);
+            HealthRegenAmount = healthInfo.HealthRegen;
+            DamageImmunityFrameDuration = healthInfo.DamageImmunityFrameDuration;
         }
-
+        
         internal abstract void UpdateState();
         internal abstract void TakeDamage(float damageAmount);
 
@@ -38,12 +37,12 @@ namespace Gameplay.Health
 
         protected void OnUnitDestroyed()
         {
-            UnitDestroyed();
+            UnitDestroyed.Invoke();
         }
         
         protected void OnDamageTaken()
         {
-            DamageTaken();
+            DamageTaken.Invoke();
         }
 
         protected void CooldownDamageImmunityFrame()
@@ -56,7 +55,7 @@ namespace Gameplay.Health
             if (damageAmount >= CurrentHealth.Value)
             {
                 CurrentHealth.Value = 0.0f;
-                UnitDestroyed();
+                UnitDestroyed.Invoke();
                 return;
             }
 

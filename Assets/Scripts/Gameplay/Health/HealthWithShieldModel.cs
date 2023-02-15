@@ -12,12 +12,12 @@ namespace Gameplay.Health
         private float _currentShieldCooldown;
         private readonly float _shieldCooldown;
 
-        public HealthWithShieldModel(HealthConfig healthConfig, ShieldConfig shieldConfig) : base(healthConfig)
+        public HealthWithShieldModel(IHealthInfo healthInfo, IShieldInfo shieldInfo) : base(healthInfo)
         {
-            MaximumShield = new SubscribedProperty<float>(shieldConfig.ShieldAmount);
-            CurrentShield = new SubscribedProperty<float>(shieldConfig.ShieldAmount);
-            _shieldCooldown = shieldConfig.Cooldown;
-            _currentShieldCooldown = 0f;
+            MaximumShield = new SubscribedProperty<float>(shieldInfo.MaximumShield);
+            CurrentShield = new SubscribedProperty<float>(shieldInfo.StartingShield);
+            _shieldCooldown = shieldInfo.Cooldown;
+            _currentShieldCooldown = shieldInfo.Cooldown;
         }
 
         internal override void TakeDamage(float damageAmount)

@@ -61,7 +61,10 @@ namespace Gameplay.Enemy.Behaviour
                     _currentBehaviour = new EnemyRoamingBehaviour(_enemyCurrentState, _view, _playerController, _movementModel, _inputController, _enemyConfig);
                     break;
                 case EnemyState.InCombat:
-                    _currentBehaviour = new EnemyCombatBehaviour(_enemyCurrentState, _view, _playerController, _inputController, _turretController, _enemyConfig, lastEnemyState);
+                    _currentBehaviour = new EnemyCombatBehaviour(_enemyCurrentState, _view, _playerController, _inputController, _turretController, _enemyConfig);
+                    break;
+                case EnemyState.InCombatWithRetreat:
+                    _currentBehaviour = new EnemyCombatWithRetreatBehaviour(_enemyCurrentState, _view, _playerController, _inputController, _turretController, _enemyConfig, lastEnemyState);
                     break;
                 case EnemyState.Escort:
                     _currentBehaviour = new EnemyEscortBehaviour(_enemyCurrentState, _view, _playerController, _inputController, _enemyConfig, _target);

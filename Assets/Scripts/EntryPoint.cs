@@ -5,16 +5,14 @@ using UnityEngine;
 public sealed class EntryPoint : MonoBehaviour
 {
     [SerializeField] private Transform uiPosition;
-    
-    private const GameState InitialGameState = GameState.Game;
+    [SerializeField] private GameState initialGameState = GameState.Game;
 
     private MainController _mainController;
     
     private void Awake()
     {
-        var gameState = new CurrentState(InitialGameState);
+        var gameState = new CurrentState(initialGameState);
         _mainController = new MainController(gameState, uiPosition);
-        
     }
     
     private void OnDestroy()

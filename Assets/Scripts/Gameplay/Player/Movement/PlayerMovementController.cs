@@ -1,11 +1,10 @@
 using Abstracts;
 using Gameplay.Movement;
-using Gameplay.Mechanics.Timer;
 using UI.Game;
 using UnityEngine;
 using Utilities.Reactive.SubscriptionProperty;
 using Utilities.Unity;
-
+using Gameplay.Mechanics.Timer;
 
 namespace Gameplay.Player.Movement
 {
@@ -21,7 +20,7 @@ namespace Gameplay.Player.Movement
         private readonly Rigidbody2D _rigidbody;
 
         private Timer _cooldownLeapTimer;
-                
+        
         private Vector3 _currentDirection;
         private float _lastTurnRate;
         
@@ -40,13 +39,12 @@ namespace Gameplay.Player.Movement
             _model = new MovementModel(config);
             _speedometerView = GameUIController.PlayerSpeedometerView;
             _speedometerView.Init(GetSpeedometerTextValue(0.0f, _model.MaxSpeed));
-            
+
             _cooldownLeapTimer = new Timer(_model.LeapCooldown);
 
             _mousePositionInput.Subscribe(HandleHorizontalMouseInput);
             _verticalInput.Subscribe(HandleVerticalInput);
             _horizontalInput.Subscribe(HandleHorizontalInput);
-            
         }
 
         protected override void OnDispose()
@@ -59,26 +57,25 @@ namespace Gameplay.Player.Movement
 
         private void HandleHorizontalInput(float newInputValue)
         {
-            if (newInputValue > 0 && !_cooldownLeapTimer.InProgress )
+            
+            if (newInputValue > 0 && !_cooldownLeapTimer.InProgress)
             {
-                              
                 var transform = _view.transform;
                 var sideDirection = transform.TransformDirection(Vector3.right);
-                _rigidbody.AddForce(sideDirection.normalized * _model.LeapLength, ForceMode2D.Force);
-                
+                _rigidbody.AddForce(sideDirection.normalized * _model.LeapLength * _model.LeapLengthMultiplier, ForceMode2D.Force);
+
                 _cooldownLeapTimer.Start();
             }
 
-            else if(newInputValue < 0 && !_cooldownLeapTimer.InProgress)
+            else if (newInputValue < 0 && !_cooldownLeapTimer.InProgress)
             {
-                              
+
                 var transform = _view.transform;
                 var sideDirection = transform.TransformDirection(Vector3.left);
-                _rigidbody.AddForce(sideDirection.normalized * _model.LeapLength, ForceMode2D.Force);
+                _rigidbody.AddForce(sideDirection.normalized * _model.LeapLength * _model.LeapLengthMultiplier, ForceMode2D.Force);
 
                 _cooldownLeapTimer.Start();
             }
-            
         }
 
         private void HandleVerticalInput(float newInputValue)
@@ -126,7 +123,7 @@ namespace Gameplay.Player.Movement
             if (UnityHelper.Approximately(angle, 0, Mathf.Abs(_lastTurnRate)))
             {
                 _model.StopTurning();
-                _lastTurnRate = _model.StartingTurnSpeed / 2;
+                _lastTurnRate = _model.StartingTurnSpeed;
 
                 if (angle > 0)
                 {

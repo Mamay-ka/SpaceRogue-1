@@ -5,6 +5,7 @@ namespace Gameplay.Enemy
         Idle = 0,
         PassiveRoaming,
         InCombat,
+        InCombatWithRetreat,
         Escort
     }
 }

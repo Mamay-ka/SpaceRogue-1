@@ -10,6 +10,8 @@ namespace Gameplay.Player.Movement
         public float MaxSpeed => _config.maximumSpeed;
         public float StoppingSpeed => _config.stoppingSpeed;
 
+        public float LeapLengthMultiplier;
+
         public float CurrentSpeed { get; private set; }
         public float CurrentTurnRate { get; private set; }
         
@@ -20,6 +22,7 @@ namespace Gameplay.Player.Movement
             _config = config;
             CurrentSpeed = 0.0f;
             CurrentTurnRate = 0.0f;
+            LeapLengthMultiplier = 100000f;
         }
 
         public void Accelerate(bool movingForward)
@@ -41,7 +44,6 @@ namespace Gameplay.Player.Movement
             }
         }
 
-       
         public void Turn(bool turningLeft)
         {
             bool isContinuingTurn = CurrentTurnRate < 0 == turningLeft;

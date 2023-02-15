@@ -105,6 +105,9 @@ namespace Gameplay.GameEvent
                     {
                         ChangeColor(_spriteRenderer, ref _currentColor, _spriteRenderer.color, Color.clear,
                                 _supernovaGameEventConfig.ShockwaveSpeed * Time.deltaTime);
+                        ChangeColor(_starView.MinimapIconSpriteRenderer, 
+                            ref _currentColor, _starView.MinimapIconSpriteRenderer.color, Color.clear,
+                            _supernovaGameEventConfig.ShockwaveSpeed * Time.deltaTime);
                     }
                     ChangeScale(_starView.transform, ref _currentScale, _starView.transform.localScale,
                                 Vector3.one * (_supernovaGameEventConfig.ShockwaveRadius + 1),
@@ -116,6 +119,7 @@ namespace Gameplay.GameEvent
                 _starView.transform.localScale = Vector3.one * _supernovaGameEventConfig.ShockwaveRadius;
                 _spriteRenderer.color = Color.clear;
                 _starCircleCollider.enabled = false;
+                _starView.MinimapIconSpriteRenderer.enabled = false;
 
                 EntryPoint.UnsubscribeFromUpdate(StartSupernova);
                 OnDestroy.Value = true;

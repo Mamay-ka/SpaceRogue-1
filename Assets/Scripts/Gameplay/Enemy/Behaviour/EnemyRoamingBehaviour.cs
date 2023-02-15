@@ -1,40 +1,44 @@
+using Abstracts;
 using Gameplay.Enemy.Movement;
+using Gameplay.Mechanics.Timer;
 using Gameplay.Movement;
 using Gameplay.Player;
 using UnityEngine;
-using Utilities.Mathematics;
 using Utilities.Reactive.SubscriptionProperty;
 using Utilities.Unity;
-using Random = System.Random;
 
 namespace Gameplay.Enemy.Behaviour
 {
     public sealed class EnemyRoamingBehaviour : EnemyBehaviour
     {
+        private const float TurnValueAtObstacle = 0.1f;
+
         private readonly MovementModel _movementModel;
         private readonly EnemyInputController _inputController;
+        private readonly Timer _timer;
         
         private Vector3 _targetDirection;
-        
-        private float _timeBeforeUpdate;
-        
+        private bool _frontObstacle;
+        private bool _rightObstacle;
+        private bool _leftObstacle;
+
         public EnemyRoamingBehaviour(
-            SubscribedProperty<EnemyState> enemyState,
-            EnemyView view,
-            PlayerController playerController, 
-            MovementModel movementModel, 
-            EnemyInputController inputController,
-            EnemyBehaviourConfig config) : base(enemyState, view, playerController, config)
+            SubscribedProperty<EnemyState> enemyState, EnemyView view, PlayerController playerController,
+            MovementModel movementModel, EnemyInputController inputController, EnemyBehaviourConfig config) 
+            : base(enemyState, view, playerController, config)
         {
             _movementModel = movementModel;
             _inputController = inputController;
+            _timer = new(Config.TimeToPickNewAngle);
+            PickRandomDirection();
         }
         
         protected override void OnUpdate()
         {
-            TickDownTimer();
-            MoveAtLowSpeed();
-            TurnToRandomDirection();
+            CheckTimer();
+            CheckObstacles();
+            MoveAtLowSpeed(_frontObstacle);
+            TurnToDirection(_rightObstacle, _leftObstacle);
         }
 
         protected override void DetectPlayer()
@@ -50,26 +54,50 @@ namespace Gameplay.Enemy.Behaviour
             }
         }
 
-        private void PickRandomAngle()
+        private void CheckObstacles()
         {
-            _targetDirection = View.transform.worldToLocalMatrix.MultiplyPoint(RandomPicker.PickRandomAngle(180, new Random())).normalized;
+            var position = View.transform.position;
+            var scaleY = View.transform.localScale.y;
+            var scaleX = View.transform.localScale.x;
+
+            var rayUpPosition = position + View.transform.TransformDirection(Vector3.up * scaleY);
+            var rayRightPosition = position + View.transform.TransformDirection(Vector3.right * scaleX);
+            var rayLeftPosition = position + View.transform.TransformDirection(Vector3.left * scaleX);
+
+            var hitUp = Physics2D.Raycast(rayUpPosition, View.transform.TransformDirection(Vector3.up), 
+                Config.FrontCheckDistance);
+            var hitRight = Physics2D.Raycast(rayRightPosition, View.transform.TransformDirection(Vector3.right),
+                Config.SideCheckDistance);
+            var hitLeft = Physics2D.Raycast(rayLeftPosition, View.transform.TransformDirection(Vector3.left),
+                Config.SideCheckDistance);
+
+            _frontObstacle = hitUp.collider != null && !hitUp.collider.TryGetComponent<UnitView>(out _);
+            _rightObstacle = hitRight.collider != null && !hitRight.collider.TryGetComponent<UnitView>(out _);
+            _leftObstacle = hitLeft.collider != null && !hitLeft.collider.TryGetComponent<UnitView>(out _);
         }
 
-        private void TickDownTimer()
+        private void CheckTimer()
         {
-            if (_timeBeforeUpdate <= Config.TimeToPickNewAngle)
+            if (_timer.IsExpired)
             {
-                _timeBeforeUpdate += Time.deltaTime;
-            }
-            else
-            {
-                _timeBeforeUpdate = 0;
-                PickRandomAngle();
+                _timer.Start();
+                PickRandomDirection();
             }
         }
 
-        private void MoveAtLowSpeed()
+        private void PickRandomDirection()
         {
+            _targetDirection = View.transform.TransformDirection(Random.insideUnitCircle).normalized;
+        }
+
+        private void MoveAtLowSpeed(bool frontObstacle)
+        {
+            if (frontObstacle)
+            {
+                _inputController.Decelerate();
+                return;
+            }
+
             var quarterMaxSpeed = _movementModel.MaxSpeed / 4;
             switch (CompareSpeeds(_movementModel.CurrentSpeed, quarterMaxSpeed))
             {
@@ -86,8 +114,23 @@ namespace Gameplay.Enemy.Behaviour
             return 1;
         }
 
-        private void TurnToRandomDirection()
+        private void TurnToDirection(bool rightObstacle, bool leftObstacle)
         {
+            if (rightObstacle)
+            {
+                _inputController.TurnLeft(TurnValueAtObstacle);
+            }
+
+            if (leftObstacle)
+            {
+                _inputController.TurnRight(TurnValueAtObstacle);
+            }
+
+            if (rightObstacle || leftObstacle)
+            {
+                return;
+            }
+
             var currentDirection = View.transform.TransformDirection(Vector3.up);
 
             if (UnityHelper.Approximately(_targetDirection, currentDirection, 0.1f))
@@ -96,14 +139,14 @@ namespace Gameplay.Enemy.Behaviour
             }
             else
             {
-                HandleTurn();
+                HandleTurn(UnityHelper.VectorAngleLessThanAngle(_targetDirection, currentDirection, 0));
             }
             
         }
 
-        private void HandleTurn()
+        private void HandleTurn(bool turningLeft)
         {
-            if (_targetDirection.x <= 0)
+            if (turningLeft)
             {
                 _inputController.TurnLeft();
             }

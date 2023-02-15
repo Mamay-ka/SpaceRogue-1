@@ -2,9 +2,7 @@ using System;
 using UnityEngine;
 
 namespace Gameplay.Movement
-{ 
-
-    
+{
     [Serializable]
     public sealed class MovementConfig
     {

@@ -4,7 +4,7 @@ namespace Gameplay.Health
 {
     public class HealthOnlyModel : BaseHealthModel
     {
-        public HealthOnlyModel(HealthConfig healthConfig) : base(healthConfig)
+        public HealthOnlyModel(IHealthInfo healthInfo) : base(healthInfo)
         {
         }
         

@@ -6,6 +6,8 @@ namespace Gameplay.Space.Star
     [RequireComponent(typeof(CircleCollider2D), typeof(SpriteRenderer))]
     public sealed class StarView : MonoBehaviour, IDamagingView
     {
+        [field: SerializeField] public SpriteRenderer MinimapIconSpriteRenderer { get; private set; }
+
         public DamageModel DamageModel { get; private set; }
         public bool InGameEvent { get; set; }
 

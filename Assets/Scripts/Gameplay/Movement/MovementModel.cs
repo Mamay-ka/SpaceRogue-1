@@ -11,14 +11,12 @@ namespace Gameplay.Movement
         public float StoppingSpeed => _config.stoppingSpeed;
         public float StartingTurnSpeed => _config.startingTurnSpeed;
 
-        public float LeapLength;
-
-        public float LeapCooldown;
         public float CurrentSpeed { get; private set; }
         public float CurrentTurnRate { get; private set; }
 
-                
-        
+        public float LeapLength;
+        public float LeapCooldown;
+        public float LeapLengthMultiplier;
         public MovementModel(MovementConfig config)
         {
             _config = config;
@@ -26,6 +24,7 @@ namespace Gameplay.Movement
             CurrentTurnRate = 0.0f;
             LeapLength = _config.leapLength;
             LeapCooldown = _config.leapCooldown;
+            LeapLengthMultiplier = 100000f;
         }
 
         public void Accelerate(bool movingForward)
@@ -47,7 +46,6 @@ namespace Gameplay.Movement
             }
         }
 
-        
         public void Turn(bool turningLeft)
         {
             bool isContinuingTurn = CurrentTurnRate < 0 == turningLeft;
@@ -88,7 +86,5 @@ namespace Gameplay.Movement
             if (accelerationTime <= 0) return speedDifference * deltaTime * 10; //Prevents zero division
             return speedDifference * deltaTime / accelerationTime;
         }
-
-        
     }
 }
