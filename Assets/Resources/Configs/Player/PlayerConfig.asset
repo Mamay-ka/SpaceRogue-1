@@ -21,7 +21,7 @@ MonoBehaviour:
     startingTurnSpeed: 3
     maximumTurnSpeed: 10
     turnAccelerationTime: 0.2
-    leapLength: 3
-    leapCooldown: 1.5
+    DashLength: 10
+    DashCooldown: 1
   <HealthConfig>k__BackingField: {fileID: 11400000, guid: b1d5019f03ef14c4c831a0d223b6921a, type: 2}
   <ShieldConfig>k__BackingField: {fileID: 11400000, guid: 1d988e8c3053fff458704ce6418fdedc, type: 2}

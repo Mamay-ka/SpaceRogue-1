@@ -19,7 +19,7 @@ namespace Gameplay.Player.Movement
         private readonly PlayerView _view;
         private readonly Rigidbody2D _rigidbody;
 
-        private Timer _cooldownLeapTimer;
+        private Timer _cooldownDashTimer;
         
         private Vector3 _currentDirection;
         private float _lastTurnRate;
@@ -40,7 +40,7 @@ namespace Gameplay.Player.Movement
             _speedometerView = GameUIController.PlayerSpeedometerView;
             _speedometerView.Init(GetSpeedometerTextValue(0.0f, _model.MaxSpeed));
 
-            _cooldownLeapTimer = new Timer(_model.LeapCooldown);
+            _cooldownDashTimer = new Timer(_model.DashCooldown);
 
             _mousePositionInput.Subscribe(HandleHorizontalMouseInput);
             _verticalInput.Subscribe(HandleVerticalInput);
@@ -52,29 +52,22 @@ namespace Gameplay.Player.Movement
             _mousePositionInput.Unsubscribe(HandleHorizontalMouseInput);
             _verticalInput.Unsubscribe(HandleVerticalInput);
             _horizontalInput.Unsubscribe(HandleHorizontalInput);
-            _cooldownLeapTimer.Dispose();
+            _cooldownDashTimer.Dispose();
         }
 
         private void HandleHorizontalInput(float newInputValue)
         {
             
-            if (newInputValue > 0 && !_cooldownLeapTimer.InProgress)
+            if (newInputValue < 0 && !_cooldownDashTimer.InProgress)
             {
-                var transform = _view.transform;
-                var sideDirection = transform.TransformDirection(Vector3.right);
-                _rigidbody.AddForce(sideDirection.normalized * _model.LeapLength * _model.LeapLengthMultiplier, ForceMode2D.Force);
-
-                _cooldownLeapTimer.Start();
+                int dashDirectionLeft = 1;
+                Dash( dashDirectionLeft) ;
             }
 
-            else if (newInputValue < 0 && !_cooldownLeapTimer.InProgress)
+            else if (newInputValue > 0 && !_cooldownDashTimer.InProgress)
             {
-
-                var transform = _view.transform;
-                var sideDirection = transform.TransformDirection(Vector3.left);
-                _rigidbody.AddForce(sideDirection.normalized * _model.LeapLength * _model.LeapLengthMultiplier, ForceMode2D.Force);
-
-                _cooldownLeapTimer.Start();
+                int dashDirectionRight = -1;
+                Dash(dashDirectionRight);
             }
         }
 
@@ -169,5 +162,14 @@ namespace Gameplay.Player.Movement
                 < 0 => "R",
                 _ => $"SPD: {Mathf.RoundToInt(currentSpeed / maximumSpeed * 100)}"
             };
+
+        private void Dash(int dashDirection)
+        {
+            var transform = _view.transform;
+            var sideDirection = transform.TransformDirection(Vector3.left * dashDirection);
+            _rigidbody.AddForce(sideDirection.normalized * _model.DashLength * MovementModel.DashLengthMultiplier, ForceMode2D.Force);
+
+            _cooldownDashTimer.Start();
+        }
     }
 }
