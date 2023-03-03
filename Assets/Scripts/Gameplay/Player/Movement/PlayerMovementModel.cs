@@ -10,18 +10,15 @@ namespace Gameplay.Player.Movement
         public float MaxSpeed => _config.maximumSpeed;
         public float StoppingSpeed => _config.stoppingSpeed;
 
-        
         public float CurrentSpeed { get; private set; }
         public float CurrentTurnRate { get; private set; }
-        
-        
+               
         private float TurnSpeedDifference => _config.maximumTurnSpeed - _config.startingTurnSpeed;
         public PlayerMovementModel(EngineModuleConfig config)
         {
             _config = config;
             CurrentSpeed = 0.0f;
             CurrentTurnRate = 0.0f;
-            
         }
 
         public void Accelerate(bool movingForward)
@@ -73,7 +70,6 @@ namespace Gameplay.Player.Movement
                 CurrentTurnRate = turningLeft ? -1 * _config.maximumTurnSpeed : _config.maximumTurnSpeed;
             }
         }
-        
         public void StopTurning() => CurrentTurnRate = 0.0f;
         public void StopMoving() => CurrentSpeed = 0.0f;
 

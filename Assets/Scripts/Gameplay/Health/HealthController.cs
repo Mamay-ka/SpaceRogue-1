@@ -24,7 +24,7 @@ namespace Gameplay.Health
             
             statusBarView.HealthBar.Init(0.0f, healthModel.MaximumHealth.Value, healthModel.CurrentHealth.Value);
             statusBarView.ShieldBar.Init(0.0f, healthModel.MaximumShield.Value, healthModel.CurrentShield.Value);
-            
+                        
             healthModel.CurrentHealth.Subscribe(statusBarView.HealthBar.UpdateValue);
             healthModel.CurrentShield.Subscribe(statusBarView.ShieldBar.UpdateValue);
             EntryPoint.SubscribeToUpdate(healthModel.UpdateState);

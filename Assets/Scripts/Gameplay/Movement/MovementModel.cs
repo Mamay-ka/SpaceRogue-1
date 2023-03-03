@@ -14,22 +14,19 @@ namespace Gameplay.Movement
         public float CurrentSpeed { get; private set; }
         public float CurrentTurnRate { get; private set; }
 
-        public float DashLength;
+        public float DashLength { get; private set; }
 
-        public float DashCooldown;
+        public float DashCooldown { get; private set; }
 
         public const float DashLengthMultiplier = 10000f;
         
-
         public MovementModel(MovementConfig config)
         {
-
             _config = config;
             CurrentSpeed = 0.0f;
             CurrentTurnRate = 0.0f;
             DashLength = _config.DashLength;
             DashCooldown = _config.DashCooldown;
-            
         }
 
         public void Accelerate(bool movingForward)
@@ -37,7 +34,6 @@ namespace Gameplay.Movement
             float acceleration = CountAcceleration(_config.maximumSpeed, _config.accelerationTime);
             acceleration *= movingForward ? 1 : -1;
             float maxSpeed = movingForward ? _config.maximumSpeed : -1 * _config.maximumBackwardSpeed;
-
             switch (movingForward)
             {
                 case true when Mathf.Abs(CurrentSpeed) < Mathf.Abs(maxSpeed):
@@ -89,8 +85,7 @@ namespace Gameplay.Movement
         {
             float deltaTime = Time.deltaTime;
             if (accelerationTime <= 0) return speedDifference * deltaTime * 10; //Prevents zero division
-            return speedDifference * deltaTime / accelerationTime;
+            return speedDifference * deltaTime/accelerationTime;
         }
-                
     }
 }

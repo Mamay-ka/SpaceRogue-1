@@ -57,17 +57,13 @@ namespace Gameplay.Player.Movement
 
         private void HandleHorizontalInput(float newInputValue)
         {
-            
             if (newInputValue < 0 && !_cooldownDashTimer.InProgress)
             {
-                int dashDirectionLeft = 1;
-                Dash( dashDirectionLeft) ;
+                Dash(Vector3.left) ;
             }
-
             else if (newInputValue > 0 && !_cooldownDashTimer.InProgress)
             {
-                int dashDirectionRight = -1;
-                Dash(dashDirectionRight);
+                Dash(Vector3.right);
             }
         }
 
@@ -163,10 +159,10 @@ namespace Gameplay.Player.Movement
                 _ => $"SPD: {Mathf.RoundToInt(currentSpeed / maximumSpeed * 100)}"
             };
 
-        private void Dash(int dashDirection)
+        private void Dash(Vector3 vector3)
         {
             var transform = _view.transform;
-            var sideDirection = transform.TransformDirection(Vector3.left * dashDirection);
+            var sideDirection = transform.TransformDirection(vector3);
             _rigidbody.AddForce(sideDirection.normalized * _model.DashLength * MovementModel.DashLengthMultiplier, ForceMode2D.Force);
 
             _cooldownDashTimer.Start();
