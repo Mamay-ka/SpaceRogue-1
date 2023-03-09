@@ -8,7 +8,5 @@ namespace UI.Game
         [field: SerializeField] public Transform EnemyHealthBars { get; private set; }
         [field: SerializeField] public Transform GameEventIndicators { get; private set; }
         [field: SerializeField] public Transform LevelInfo { get; private set; }
-
-        [field: SerializeField] public Transform ExperienceBar { get; private set; }//!!!!
     }
 }

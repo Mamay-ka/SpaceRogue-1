@@ -96,7 +96,6 @@ public static class Constants
 
                 public static readonly string GameCanvas = Path.Combine(GAME, nameof(GameCanvas));
                 public static readonly string StatusBarCanvas = Path.Combine(GAME, nameof(StatusBarCanvas));
-                public static readonly string ExperienceBarCanvas = Path.Combine(GAME, nameof(ExperienceBarCanvas));//!!!!
                 public static readonly string SpeedometerCanvas = Path.Combine(GAME, nameof(SpeedometerCanvas));
                 public static readonly string WeaponCanvas = Path.Combine(GAME, nameof(WeaponCanvas));
                 public static readonly string LevelNumberCanvas = Path.Combine(GAME, nameof(LevelNumberCanvas));

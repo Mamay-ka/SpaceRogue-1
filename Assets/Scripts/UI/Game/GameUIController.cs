@@ -8,8 +8,6 @@ namespace UI.Game
     public sealed class GameUIController : BaseController
     {
         public static Canvas MainCanvas { get; private set; }
-
-        public static PlayerExperienceBarView PlayerExperienceBarView { get; private set; }//!!!!!
         public static PlayerStatusBarView PlayerStatusBarView { get; private set; }
         public static PlayerSpeedometerView PlayerSpeedometerView { get; private set; }
         public static PlayerWeaponView PlayerWeaponView { get; private set; }
@@ -26,7 +24,6 @@ namespace UI.Game
 
         private readonly ResourcePath _gameCanvasPath = new(Constants.Prefabs.Canvas.Game.GameCanvas);
         private readonly ResourcePath _playerStatusBarCanvasPath = new(Constants.Prefabs.Canvas.Game.StatusBarCanvas);
-        private readonly ResourcePath _playerExperienceBarCanvasPath = new(Constants.Prefabs.Canvas.Game.ExperienceBarCanvas);//!!!!
         private readonly ResourcePath _playerSpeedometerCanvasPath = new(Constants.Prefabs.Canvas.Game.SpeedometerCanvas);
         private readonly ResourcePath _playerWeaponCanvasPath = new(Constants.Prefabs.Canvas.Game.WeaponCanvas);
         private readonly ResourcePath _levelNumberCanvasPath = new(Constants.Prefabs.Canvas.Game.LevelNumberCanvas);
@@ -50,7 +47,6 @@ namespace UI.Game
             GameEventIndicators = _gameCanvasView.GameEventIndicators;
 
             AddPlayerStatusBar();
-            AddExperienceBar();//!!!!
             AddPlayerSpeedometer();
             AddPlayerWeapon();
             AddLevelNumber();
@@ -69,13 +65,6 @@ namespace UI.Game
             PlayerStatusBarView = ResourceLoader.LoadPrefabAsChild<PlayerStatusBarView>
                 (_playerStatusBarCanvasPath, _gameCanvasView.PlayerInfo);
             AddGameObject(PlayerStatusBarView.gameObject);
-        }
-
-        private void AddExperienceBar()//!!!!!
-        {
-            PlayerExperienceBarView = ResourceLoader.LoadPrefabAsChild<PlayerExperienceBarView>
-                (_playerExperienceBarCanvasPath, _gameCanvasView.ExperienceBar);
-            AddGameObject(PlayerExperienceBarView.gameObject);
         }
 
         private void AddPlayerSpeedometer()
@@ -120,7 +109,6 @@ namespace UI.Game
         {
             MainCanvas = null;
             PlayerStatusBarView = null;
-            PlayerExperienceBarView = null;//!!!!!
             PlayerSpeedometerView = null;
             PlayerWeaponView = null;
             LevelNumberView = null;
