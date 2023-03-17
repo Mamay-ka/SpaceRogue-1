@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Gameplay.Space.Planet;
+using Gameplay.Space.Planets;
 using Gameplay.Space.SpaceObjects.Scriptables;
 using Gameplay.Space.Star;
 using Scriptables;

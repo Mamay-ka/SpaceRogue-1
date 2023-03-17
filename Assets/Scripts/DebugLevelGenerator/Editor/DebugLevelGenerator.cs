@@ -1,83 +1,81 @@
 ﻿using Gameplay.Space.Generator;
+using Gameplay.Space.SpaceObjects.Scriptables;
+using System.Linq;
 using UnityEngine;
-using UnityEngine.Tilemaps;
+using Utilities.Mathematics;
 
 namespace DebugLevelGenerator.Editor
 {
-    public sealed class DebugLevelGenerator : SpaceGenerator
+    public sealed class DebugLevelGenerator
     {
-        private readonly Tilemap _borderTilemap;
-        private readonly Tilemap _borderMaskTilemap;
-        private readonly Tilemap _nebulaTilemap;
-        private readonly Tilemap _nebulaMaskTilemap;
+        private const float DefaultOrbit = 10;
 
-        private readonly Tilemap _starTilemap;
-        private readonly TileBase _starTileBase;
+        private readonly DebugLevelGeneratorView _debugLevelGeneratorView;
+        private readonly float _maxRealCellSize;
 
-        public DebugLevelGenerator(DebugLevelGeneratorView debugLevelGeneratorView) 
-            : base(debugLevelGeneratorView.SpaceView,
-                   debugLevelGeneratorView.SpaceConfig,
-                   debugLevelGeneratorView.StarSpawnConfig,
-                   debugLevelGeneratorView.LegacyEnemySpawnConfig)
+        public DebugLevelGenerator(DebugLevelGeneratorView debugLevelGeneratorView)
         {
-            _borderTilemap = debugLevelGeneratorView.SpaceView.BorderTilemap;
-            _borderMaskTilemap = debugLevelGeneratorView.SpaceView.BorderMaskTilemap;
-            _nebulaTilemap = debugLevelGeneratorView.SpaceView.NebulaTilemap;
-            _nebulaMaskTilemap = debugLevelGeneratorView.SpaceView.NebulaMaskTilemap;
+            _debugLevelGeneratorView = debugLevelGeneratorView;
 
-            _starTilemap = debugLevelGeneratorView.StarTilemap;
-            _starTileBase = debugLevelGeneratorView.StarTileBase;
+            var tilemap = _debugLevelGeneratorView.SpaceView.NebulaTilemap;
+            _maxRealCellSize = Mathf.Max(
+                tilemap.cellSize.x * tilemap.transform.localScale.x,
+                tilemap.cellSize.y * tilemap.transform.localScale.y);
         }
 
-        protected override void Draw()
+        public void Generate()
         {
             ClearTileMaps();
 
-            DrawLayer(_borderMap, _borderTilemap, _borderTileBase, CellType.Border);
-            DrawLayer(_borderMap, _borderMaskTilemap, _borderMaskTileBase, CellType.Border);
-            DrawLayer(_nebulaMap, _nebulaTilemap, _nebulaTileBase, CellType.Obstacle);
-            DrawLayer(_nebulaMap, _nebulaMaskTilemap, _nebulaMaskTileBase, CellType.Obstacle);
+            var map = new MapGenerator(_debugLevelGeneratorView.SpaceConfig);
+            map.Generate();
+            
+            var debugLevelMap = new DebugLevelMap(_debugLevelGeneratorView, _debugLevelGeneratorView.SpaceConfig, map.BorderMap, map.NebulaMap);
 
-            DrawLayer(_spaceObjectsMap, _starTilemap, _starTileBase, CellType.Star);
-        }
+            var spawnPointsFinder = new SpawnPointsFinder(map.NebulaMap, _debugLevelGeneratorView.SpaceView.NebulaTilemap);
 
-        private void DrawLayer(int[,] map, Tilemap tilemap, TileBase tileBase, CellType cellType)
-        {
-            if (map == null)
+            var random = new System.Random();
+
+            for (int i = 0; i < _debugLevelGeneratorView.SpaceConfig.SpaceObjectCount; i++)
             {
-                return;
-            }
-
-            for (int x = 0; x < map.GetLength(0); x++)
-            {
-                for (int y = 0; y < map.GetLength(1); y++)
+                var config = RandomPicker.PickOneElementByWeights(_debugLevelGeneratorView.SpaceObjectSpawnConfig.SpaceObjectWeights, random);
+                var starSize = RandomPicker.PickRandomBetweenTwoValues(config.MinSize, config.MaxSize, random);
+                var effectConfig = config.Effects.First(x => x is PlanetSystemConfig planetSystemConfig);
+                
+                var orbit = DefaultOrbit;
+                if (effectConfig is PlanetSystemConfig planetSystemConfig)
                 {
-                    var positionTile = new Vector3Int(-map.GetLength(0) / 2 + x, -map.GetLength(1) / 2 + y, 0);
-
-                    if (map[x, y] == (int)cellType)
-                    {
-                        tilemap.SetTile(positionTile, tileBase);
-                    }
+                    orbit = planetSystemConfig.MinOrbit;
+                }
+                
+                if (spawnPointsFinder.TryGetSpaceObjectSpawnPoint(starSize, orbit, out var spawnPoint))
+                {
+                    debugLevelMap.SetSpaceObjectsTile(CorrectCoordinate(spawnPoint));
                 }
             }
         }
 
         public void ClearTileMaps()
         {
-            if (_borderTilemap != null)
+            if (_debugLevelGeneratorView.SpaceView.BorderTilemap != null)
             {
-                _borderTilemap.ClearAllTiles();
-                _borderMaskTilemap.ClearAllTiles();
+                _debugLevelGeneratorView.SpaceView.BorderTilemap.ClearAllTiles();
+                _debugLevelGeneratorView.SpaceView.BorderMaskTilemap.ClearAllTiles();
             }
-            if (_nebulaTilemap != null)
+            if (_debugLevelGeneratorView.SpaceView.NebulaTilemap != null)
             {
-                _nebulaTilemap.ClearAllTiles();
-                _nebulaMaskTilemap.ClearAllTiles();
+                _debugLevelGeneratorView.SpaceView.NebulaTilemap.ClearAllTiles();
+                _debugLevelGeneratorView.SpaceView.NebulaMaskTilemap.ClearAllTiles();
             }
-            if (_starTilemap != null)
+            if (_debugLevelGeneratorView.SpaceObjectsTilemap != null)
             {
-                _starTilemap.ClearAllTiles();
+                _debugLevelGeneratorView.SpaceObjectsTilemap.ClearAllTiles();
             }
+        }
+
+        private Vector3Int CorrectCoordinate(Vector3 point)
+        {
+            return Vector3Int.FloorToInt(point / _maxRealCellSize);
         }
     }
 }

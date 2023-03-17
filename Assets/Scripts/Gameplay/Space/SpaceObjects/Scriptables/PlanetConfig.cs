@@ -1,4 +1,4 @@
-using Gameplay.Space.Planet;
+using Gameplay.Space.Planets;
 using UnityEngine;
 
 namespace Gameplay.Space.SpaceObjects.Scriptables

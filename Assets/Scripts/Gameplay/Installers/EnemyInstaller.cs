@@ -4,6 +4,9 @@ using Gameplay.Space.Generator;
 using UnityEngine;
 using Zenject;
 using Gameplay.Pooling;
+using Gameplay.Player;
+using Gameplay.Survival;
+using Scriptables;
 
 namespace Gameplay.Installers
 {
@@ -14,9 +17,19 @@ namespace Gameplay.Installers
 
         public override void InstallBindings()
         {
+            InstallEnemyPool();
             InstallEnemyForces();
+            InstallEnemyHealth();
             InstallEnemy();
             InstallEnemyView();
+        }
+
+        private void InstallEnemyPool()
+        {
+            Container
+                .Bind<EnemyPool>()
+                .FromInstance(EnemyPool)
+                .AsSingle();
         }
 
         private void InstallEnemyForces()
@@ -31,6 +44,13 @@ namespace Gameplay.Installers
                 .AsSingle();
         }
 
+        private void InstallEnemyHealth()
+        {
+            Container
+                .BindFactory<EntitySurvivalConfig, EntitySurvival, EnemySurvivalFactory>()
+                .AsSingle();
+        }
+
         private void InstallEnemy()
         {
             Container
@@ -40,11 +60,6 @@ namespace Gameplay.Installers
 
         private void InstallEnemyView()
         {
-            Container
-                .Bind<EnemyPool>()
-                .FromInstance(EnemyPool)
-                .WhenInjectedInto<EnemyViewFactory>();
-
             Container
                 .BindFactory<Vector2, EnemyConfig, EnemyView, EnemyViewFactory>()
                 .AsSingle();

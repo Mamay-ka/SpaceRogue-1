@@ -4,6 +4,7 @@ using Gameplay.Pooling;
 using Gameplay.Space.SpaceObjects.Scriptables;
 using Gameplay.Space.SpaceObjects;
 using Gameplay.Space.Factories;
+using Gameplay.Space.Planets;
 using Gameplay.Space.SpaceObjects.SpaceObjectsEffects;
 
 namespace Gameplay.Installers
@@ -15,33 +16,44 @@ namespace Gameplay.Installers
 
         public override void InstallBindings()
         {
-            InstallSpaceObjectViewFactory();
-            InstallSpaceObjectEffectFactory();
-            InstallSpaceObjectFactory();
+            InstallSpaceObjectsPool();
+            InstallPlanetFactories();
+            InstallSpaceObjectFactories();
         }
 
-        private void InstallSpaceObjectViewFactory()
+        private void InstallSpaceObjectsPool()
         {
             Container
                 .Bind<SpaceObjectsPool>()
                 .FromInstance(SpaceObjectsPool)
-                .WhenInjectedInto<SpaceObjectViewFactory>();
-
-            Container
-                .BindFactory<Vector2, SpaceObjectConfig, SpaceObjectView, SpaceObjectViewFactory>()
                 .AsSingle();
         }
         
-        private void InstallSpaceObjectEffectFactory()
+        private void InstallPlanetFactories()
         {
-            //TODO Remake
             Container
-                .BindFactory<SpaceObjectEffectConfig, SpaceObjectEffect, SpaceObjectEffectFactory>().To<SpaceObjectEmptyEffect>()
+                .BindFactory<Vector2, PlanetConfig, PlanetView, PlanetViewFactory>()
+                .AsSingle();
+
+            Container
+                .BindFactory<PlanetView, PlanetMovement, PlanetMovementFactory>()
+                .AsSingle();
+
+            Container
+                .BindFactory<Vector2, PlanetConfig, Planet, PlanetFactory>()
                 .AsSingle();
         }
 
-        private void InstallSpaceObjectFactory()
+        private void InstallSpaceObjectFactories()
         {
+            Container
+                .BindFactory<Vector2, SpaceObjectConfig, SpaceObjectView, SpaceObjectViewFactory>()
+                .AsSingle();
+            
+            Container
+                .BindIFactory<SpaceObjectEffectConfig, SpaceObjectEffect>()
+                .FromFactory<SpaceObjectEffectFactory>();
+            
             Container
                 .BindFactory<Vector2, SpaceObjectConfig, SpaceObject, SpaceObjectFactory>()
                 .AsSingle();

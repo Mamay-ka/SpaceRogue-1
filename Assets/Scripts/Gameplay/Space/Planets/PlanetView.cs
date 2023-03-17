@@ -1,9 +1,9 @@
+using System;
 using Gameplay.Damage;
 using Gameplay.Space.Star;
-using System;
 using UnityEngine;
 
-namespace Gameplay.Space.Planet
+namespace Gameplay.Space.Planets
 {
     [RequireComponent(typeof(CircleCollider2D))]
     public sealed class PlanetView : MonoBehaviour, IDamagingView

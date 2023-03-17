@@ -10,9 +10,9 @@ namespace Gameplay.Space.Factories
     public class SpaceObjectFactory : PlaceholderFactory<Vector2, SpaceObjectConfig, SpaceObject>
     {
         private readonly SpaceObjectViewFactory _viewFactory;
-        private readonly SpaceObjectEffectFactory _spaceObjectEffectFactory;
+        private readonly IFactory<SpaceObjectEffectConfig, SpaceObjectEffect> _spaceObjectEffectFactory;
 
-        public SpaceObjectFactory(SpaceObjectViewFactory viewFactory, SpaceObjectEffectFactory spaceObjectEffectFactory)
+        public SpaceObjectFactory(SpaceObjectViewFactory viewFactory, IFactory<SpaceObjectEffectConfig, SpaceObjectEffect> spaceObjectEffectFactory)
         {
             _viewFactory = viewFactory;
             _spaceObjectEffectFactory = spaceObjectEffectFactory;

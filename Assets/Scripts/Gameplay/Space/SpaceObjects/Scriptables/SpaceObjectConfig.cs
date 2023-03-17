@@ -1,11 +1,10 @@
 using System.Collections.Generic;
-using Gameplay.Space.SpaceObjects.SpaceObjectsEffects;
 using UnityEngine;
 
 namespace Gameplay.Space.SpaceObjects.Scriptables
 {
     [CreateAssetMenu(fileName = nameof(SpaceObjectConfig), menuName = "Configs/Space/" + nameof(SpaceObjectConfig))]
-    public class SpaceObjectConfig : ScriptableObject
+    public sealed class SpaceObjectConfig : ScriptableObject
     {
         [field: SerializeField] public SpaceObjectView Prefab { get; private set; }
 

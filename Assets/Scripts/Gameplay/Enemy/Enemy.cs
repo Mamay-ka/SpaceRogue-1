@@ -8,9 +8,10 @@ namespace Gameplay.Enemy
         public EnemyView EnemyView { get; }
         public EntitySurvival Survival { get; }
 
-        public Enemy(EnemyView enemyView)
+        public Enemy(EnemyView enemyView, EntitySurvival enemySurvival)
         {
             EnemyView = enemyView;
+            Survival = enemySurvival;
         }
 
         public void Dispose()

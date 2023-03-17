@@ -3,7 +3,7 @@ using Gameplay.Damage;
 using Gameplay.Space.Star;
 using UnityEngine;
 
-namespace Gameplay.Space.Planet
+namespace Gameplay.Space.Planets
 {
     public sealed class PlanetController : BaseController
     {

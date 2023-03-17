@@ -24,7 +24,5 @@ namespace Gameplay.Space.SpaceObjects.Scriptables
         [field: SerializeField, Min(0)] public int FactorSmooth { get; private set; } = 4;
         [field: SerializeField] public RandomType RandomType { get; private set; } = RandomType.Random;
         [field: SerializeField, Range(0.01f, 1f)] public float Chance { get; private set; } = 0.475f;
-
-        
     }
 }

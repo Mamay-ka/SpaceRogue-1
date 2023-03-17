@@ -57,7 +57,7 @@ namespace Gameplay.LevelProgress
 
         public override Level Create(int levelNumber)
         {
-            PickRandomLevelPreset();
+            _currentLevelPreset = PickRandomLevelPreset();
             var spaceView = _spaceViewFactory.Create();
 
             var map = _mapGeneratorFactory.Create(_currentLevelPreset.SpaceConfig);
@@ -71,11 +71,7 @@ namespace Gameplay.LevelProgress
 
             _spaceObstacleFactory.Create(spaceView.SpaceObstacleView, _currentLevelPreset.SpaceConfig.ObstacleForce);
 
-            var player = default(Player.Player);
-            if (spawnPointsFinder.TryGetPlayerSpawnPoint(out var playerSpawnPoint))
-            {
-                player = _playerFactory.Create(playerSpawnPoint);
-            }
+            var player = _playerFactory.Create(spawnPointsFinder.GetPlayerSpawnPoint());
 
             //_spaceObjectFactory
 
@@ -86,10 +82,10 @@ namespace Gameplay.LevelProgress
             return level;
         }
 
-        private void PickRandomLevelPreset()
+        private LevelPreset PickRandomLevelPreset()
         {
             var index = new Random().Next(_levelPresetsConfig.Presets.Count);
-            _currentLevelPreset = _levelPresetsConfig.Presets[index];
+            return _levelPresetsConfig.Presets[index];
         }
     }
 }

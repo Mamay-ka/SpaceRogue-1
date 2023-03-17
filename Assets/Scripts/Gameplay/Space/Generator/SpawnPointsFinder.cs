@@ -33,12 +33,13 @@ namespace Gameplay.Space.Generator
         public bool TryGetSpaceObjectSpawnPoint(float starSize, float orbit, out Vector3 spawnPoint)
         {
             var occupiedRadius = starSize / 2 + orbit;
-            return TryGetSpawnPoint(CellType.Star, occupiedRadius, out spawnPoint);
+            return TryGetSpawnPoint(CellType.SpaceObjects, occupiedRadius, out spawnPoint);
         }
 
-        public bool TryGetPlayerSpawnPoint(out Vector3 spawnPoint)
+        public Vector3 GetPlayerSpawnPoint()
         {
-            return TryGetSpawnPoint(CellType.Player, 1, out spawnPoint);
+            TryFindAvailablePointOnMap(_availablePoints, CellType.Player, _spaceObjectsMap, 1, 1);
+            return GetSpawnPoint(CellType.Player);
         }
 
         public bool TryGetEnemySpawnPoint(int groupCount, out Vector3 spawnPoint)

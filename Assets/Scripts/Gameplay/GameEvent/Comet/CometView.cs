@@ -1,6 +1,6 @@
 using System;
 using Gameplay.Damage;
-using Gameplay.Space.Planet;
+using Gameplay.Space.Planets;
 using Gameplay.Space.Star;
 using UnityEngine;
 

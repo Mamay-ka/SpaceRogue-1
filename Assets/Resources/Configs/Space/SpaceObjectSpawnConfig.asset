@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d1514134bc4fbd41bb739b1b9a49231, type: 3}
-  m_Name: StarTile
+  m_Script: {fileID: 11500000, guid: 9d8980165ac2fb544bf8b4cb4eb712ad, type: 3}
+  m_Name: SpaceObjectSpawnConfig
   m_EditorClassIdentifier: 
-  m_DefaultSprite: {fileID: 21300000, guid: 2adb0b75099cdf34d8c8cacddf384daa, type: 3}
-  m_DefaultGameObject: {fileID: 0}
-  m_DefaultColliderType: 1
-  m_TilingRules: []
+  <SpaceObjectWeights>k__BackingField:
+  - <Weight>k__BackingField: 500
+    <Config>k__BackingField: {fileID: 11400000, guid: 390b42959d9dc644e8c300f459e463e5, type: 2}

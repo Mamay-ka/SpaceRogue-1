@@ -28,12 +28,17 @@ namespace Gameplay.Player
             _playerTurning = playerTurning;
             _playerWeapon = playerWeapon;
             Survival = playerSurvival;
+
+            Survival.EntityHealth.HealthReachedZero += OnDeath;
         }
 
         public void Dispose()
         {
+            Survival.EntityHealth.HealthReachedZero -= OnDeath;
+            
             PlayerDestroyed.Invoke();
             
+            Survival.Dispose();
             _playerMovement.Dispose();
             _playerTurning.Dispose();
             _playerWeapon.Dispose();
