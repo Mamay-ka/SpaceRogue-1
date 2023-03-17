@@ -23,5 +23,11 @@ namespace Gameplay.Movement
         [SerializeField] public float maximumTurnSpeed = 0.1f;
         [Min(0.1f)]
         [SerializeField] public float turnAccelerationTime = 0.1f;
+
+        [Header("Dash")]
+        [Min(0.1f)]
+        [SerializeField] public float dashLength = 0.1f;
+        [Min(0.1f)]
+        [SerializeField] public float dashCooldown = 0.1f;
     }
 }
