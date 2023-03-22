@@ -19,3 +19,5 @@ MonoBehaviour:
   startingTurnSpeed: 3
   maximumTurnSpeed: 10
   turnAccelerationTime: 0.2
+  dashLength: 5
+  dashCooldown: 1.5

@@ -14,20 +14,16 @@ namespace Gameplay.Movement
         public float CurrentSpeed { get; private set; }
         public float CurrentTurnRate { get; private set; }
 
-        public float DashLength { get; private set; }
+        //public float DashLength => _config.dashLength;
+        //public float DashCooldown => _config.dashCooldown;
 
-        public float DashCooldown { get; private set; }
-
-        public const float DashLengthMultiplier = 10000f;
-
+        //public const float DashLengthMultiplier = 10000f;
 
         public UnitMovementModel(UnitMovementConfig config)
         {
             _config = config;
             CurrentSpeed = 0.0f;
             CurrentTurnRate = 0.0f;
-            DashLength = _config.dashLength;
-            DashCooldown = _config.dashCooldown;
         }
 
         public void Accelerate(bool movingForward)
