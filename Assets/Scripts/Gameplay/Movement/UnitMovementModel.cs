@@ -13,12 +13,7 @@ namespace Gameplay.Movement
 
         public float CurrentSpeed { get; private set; }
         public float CurrentTurnRate { get; private set; }
-
-        //public float DashLength => _config.dashLength;
-        //public float DashCooldown => _config.dashCooldown;
-
-        //public const float DashLengthMultiplier = 10000f;
-
+               
         public UnitMovementModel(UnitMovementConfig config)
         {
             _config = config;
@@ -85,6 +80,5 @@ namespace Gameplay.Movement
             if (accelerationTime <= 0) return speedDifference * deltaTime * 10; //Prevents zero division
             return speedDifference * deltaTime / accelerationTime;
         }
-
     }
 }

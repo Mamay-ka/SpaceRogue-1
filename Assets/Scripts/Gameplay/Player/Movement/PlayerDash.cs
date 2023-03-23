@@ -10,22 +10,17 @@ namespace Gameplay.Player.Movement
     public sealed class PlayerDash : IDisposable
     {
         private readonly PlayerInput _playerInput;
-        //private readonly UnitMovementModel _model;
         private readonly Rigidbody2D _rigidbody;
         private readonly Transform _transform;
         private readonly UnitMovementConfig _config;
 
-        public const float DashLengthMultiplier = 10000f;
+        private const float DashLengthMultiplier = 10000f;
         public Timer CooldownDashTimer { get; private set; }
-
-        //public float DashLength => _config.dashLength;
-        //public float DashCooldown => _config.dashCooldown;
-
-        public PlayerDash(PlayerInput input, UnitMovementConfig movementConfig,
-            PlayerView playerView, TimerFactory timerFactory)
+             
+        public PlayerDash(PlayerView playerView, PlayerInput input, 
+            UnitMovementConfig movementConfig, TimerFactory timerFactory)
         {
             _playerInput = input;
-            //_model = movementModelFactory.Create(movementConfig);
             _rigidbody = playerView.GetComponent<Rigidbody2D>();
             _transform = playerView.transform;
             _config = movementConfig;
@@ -37,17 +32,22 @@ namespace Gameplay.Player.Movement
         public void Dispose()
         {
             _playerInput.HorizontalAxisInput -= HandleHorizontalInput;
+            CooldownDashTimer.Dispose();
         }
 
         private void HandleHorizontalInput(float newInputValue)
         {
-            if (newInputValue < 0 && !CooldownDashTimer.InProgress)
+            if (newInputValue == 0)
             {
-                Dash(Vector3.left);
+                return;
             }
-            else if (newInputValue > 0 && !CooldownDashTimer.InProgress)
+            if (CooldownDashTimer.InProgress)
             {
-                Dash(Vector3.right);
+                return;
+            }
+            else
+            {
+                Dash(newInputValue < 0 ? Vector3.left : Vector3.right);
             }
         }
 

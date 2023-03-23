@@ -49,12 +49,12 @@ namespace Gameplay.Installers
                 .FromInstance(PlayerConfig.UnitMovement)
                 .WhenInjectedInto<PlayerTurning>();
 
-            Container//!!!!!!!!!!
+            Container
                 .Bind<UnitMovementConfig>()
                 .FromInstance(PlayerConfig.UnitMovement)
                 .WhenInjectedInto<PlayerDash>();
 
-            Container//!!!!
+            Container
                 .BindFactory<PlayerView, PlayerDash, PlayerDashFactory>()
                 .AsSingle();
 
@@ -66,7 +66,7 @@ namespace Gameplay.Installers
                 .BindFactory<PlayerView, PlayerTurning, PlayerTurningFactory>()
                 .AsSingle();
 
-            Container//!!!
+            Container
                 .Bind<PlayerDash>()
                 .AsCached();
 

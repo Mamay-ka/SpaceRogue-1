@@ -10,7 +10,7 @@ namespace Gameplay.Player
         private readonly PlayerMovement _playerMovement;
         private readonly PlayerTurning _playerTurning;
         private readonly PlayerWeapon _playerWeapon;
-        private readonly PlayerDash _playerDash;//!!!!
+        private readonly PlayerDash _playerDash;
 
         public event Action PlayerDestroyed = () => { };
 
@@ -23,13 +23,13 @@ namespace Gameplay.Player
             PlayerTurning playerTurning,
             EntitySurvival playerSurvival,
             PlayerWeapon playerWeapon,
-            PlayerDash playerDash)//!!!
+            PlayerDash playerDash)
         {
             PlayerView = playerView;
             _playerMovement = playerMovement;
             _playerTurning = playerTurning;
             _playerWeapon = playerWeapon;
-            _playerDash = playerDash;//!!!!
+            _playerDash = playerDash;
             Survival = playerSurvival;
 
             Survival.EntityHealth.HealthReachedZero += OnDeath;
@@ -45,7 +45,7 @@ namespace Gameplay.Player
             _playerMovement.Dispose();
             _playerTurning.Dispose();
             _playerWeapon.Dispose();
-            _playerDash.Dispose();//!!!
+            _playerDash.Dispose();
             
             UnityEngine.Object.Destroy(PlayerView.gameObject);
         }

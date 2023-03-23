@@ -14,7 +14,7 @@ namespace Gameplay.Player
         private readonly PlayerTurningFactory _playerTurningFactory;
         private readonly PlayerSurvivalFactory _playerSurvivalFactory;
         private readonly PlayerWeaponFactory _playerWeaponFactory;
-        private readonly PlayerDashFactory _playerDashFactory;//!!!
+        private readonly PlayerDashFactory _playerDashFactory;
         public event Action<PlayerSpawnedEventArgs> PlayerSpawned = _ => { };
 
         public PlayerFactory(
@@ -23,14 +23,14 @@ namespace Gameplay.Player
             PlayerTurningFactory playerTurningFactory,
             PlayerSurvivalFactory playerSurvivalFactory,
             PlayerWeaponFactory playerWeaponFactory,
-            PlayerDashFactory playerDashFactory)//!!!
+            PlayerDashFactory playerDashFactory)
         {
             _playerViewFactory = playerViewFactory;
             _playerMovementFactory = playerMovementFactory;
             _playerTurningFactory = playerTurningFactory;
             _playerSurvivalFactory = playerSurvivalFactory;
             _playerWeaponFactory = playerWeaponFactory;
-            _playerDashFactory = playerDashFactory;//!!!
+            _playerDashFactory = playerDashFactory;
         }
 
         public override Player Create(Vector2 spawnPoint)
@@ -40,14 +40,14 @@ namespace Gameplay.Player
             var playerTurning = _playerTurningFactory.Create(playerView);
             var playerWeapon = _playerWeaponFactory.Create(playerView);
             var playerSurvival = _playerSurvivalFactory.Create();
-            var playerDash = _playerDashFactory.Create(playerView);//!!!
+            var playerDash = _playerDashFactory.Create(playerView);
             
             PlayerSpawned.Invoke(new PlayerSpawnedEventArgs
             {
                 Transform = playerView.transform
             });
             
-            return new Player(playerView, playerMovement, playerTurning, playerSurvival, playerWeapon, playerDash);//!!!
+            return new Player(playerView, playerMovement, playerTurning, playerSurvival, playerWeapon, playerDash);
         }
     }
 }
